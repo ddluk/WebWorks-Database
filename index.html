@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" id="viewport" content="height=device-height,width=device-width,user-scalable=no" />
+<title>Database test</title>
+<script type="text/javascript">
+	var db = null;
+	
+	function startapp(){
+		
+		// create/open database
+		db = openDatabase("databasetest", '1.0', 'Test', 50 * 1024);
+                
+
+                if (db) {
+					
+                    db.transaction(function (tx) {
+						// If table not exsist create it
+                        tx.executeSql("CREATE TABLE IF NOT EXISTS userdata1 (key int unique, value1 text, value2 text, value3 text)");
+						// Get values from table
+                        tx.executeSql("SELECT value1,value2,value3 FROM userdata1 WHERE key = ?", [1], function (ax, results) {
+							//Check record. If zero application will not work
+                            if (results.rows.length == 1) {
+                                document.getElementById("text1").value = results.rows.item(0).value1;
+                                document.getElementById("text2").value = results.rows.item(0).value2;
+								document.getElementById("text3").value = results.rows.item(0).value3;
+                            }
+                            else {
+								// If zero create record with blank values
+                                tx.executeSql("INSERT INTO userdata1 (key, value1, value2, value3) VALUES (?, ?, ?, ?)", [1, "", "", ""]);
+								
+                            }
+							
+                            
+                        });
+						});
+						}
+	}
+	
+	function savedata() {
+			//get values and put them into variables
+			var data1 = document.getElementById("text1").value;
+			var data2 = document.getElementById("text2").value;	
+			var data3 = document.getElementById("text3").value;
+			
+			db.transaction(function(bx){
+					//put values into database
+					bx.executeSql("UPDATE userdata1 SET value1 = ? WHERE key = ? ", [data1, 1]);
+					bx.executeSql("UPDATE userdata1 SET value2 = ? WHERE key = ? ", [data2, 1]);
+					bx.executeSql("UPDATE userdata1 SET value3 = ? WHERE key = ? ", [data3, 1]);
+					});
+					
+	}
+	
+	function loaddata() {
+				
+			                    db.transaction(function (tx) {
+
+                        tx.executeSql("CREATE TABLE IF NOT EXISTS userdata1 (key int unique, value1 text, value2 text, value3 text)");
+                        tx.executeSql("SELECT value1,value2,value3 FROM userdata1 WHERE key = ?", [1], function (ax, results) {
+							
+                            if (results.rows.length == 1) {
+                                document.getElementById("text1").value = results.rows.item(0).value1;
+                                document.getElementById("text2").value = results.rows.item(0).value2;
+								document.getElementById("text3").value = results.rows.item(0).value3;
+                            }
+                            else {
+                                tx.executeSql("INSERT INTO userdata1 (key, value1, value2, value3) VALUES (?, ?, ?, ?)", [1, "", "", ""]);
+								
+                            }
+							   
+                        });
+						});	
+					
+	}
+	
+</script>
+</head>
+<body onload="startapp();">
+
+<form>
+	<input type="text" id="text1"><br>
+	<input type="text" id="text2"><br>
+	<input type="text" id="text3"><br>
+	<input type="button" id="save" value="Save" onclick="savedata();"><br>
+<input type="reset"><br>
+<input type="button" id="read" onclick="loaddata();"  value="Load">
+</form>
+
+
+</body>
+</html>
+
+
+

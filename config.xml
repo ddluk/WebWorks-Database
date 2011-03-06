@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:rim="http://www.blackberry.com/ns/widgets" version="1.0.0" rim:header="RIM-Widget:rim/widget">
+  <name>Databse</name>
+  <description>Database</description>
+  <author email="lukasz@blogp4.pl">Lukasz Dzierzak</author>
+  <feature id="blackberry.ui.menu" required="true" version="1.0.0.0"/>
+  <feature id="blackberry.app" required="true" version="1.0.0.0"/>
+  <feature id="blackberry.invoke" required="true" version="1.0.0.0"/>
+  <feature id="blackberry.invoke.BrowserArguments" required="true" version="1.0.0.0"/>
+  <feature id="blackberry.invoke.MessageArguments" required="true" version="1.0.0.0"/>
+  <icon rim:hover="false" src="icon.png"/>
+  <icon rim:hover="true" src="icon.png"/>
+  <content src="index.html"/>
+  <rim:cache disableAllCache="true"/>
+</widget>
